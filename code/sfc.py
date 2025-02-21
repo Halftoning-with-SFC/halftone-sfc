@@ -211,7 +211,7 @@ if __name__ == '__main__':
         n = 3**order
         space_filling_curve = [peano(i, order) for i in range(n * n)]
     elif curve == 'lesbegue':
-        n = 4**order
+        n = 2**order
         space_filling_curve = [lesbegue(i, order) for i in range(n * n)]
     else:
         raise ValueError('invalid curve type, choose from (hilbert, peano, lesbegue)')

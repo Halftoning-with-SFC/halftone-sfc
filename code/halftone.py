@@ -39,8 +39,8 @@ def generate_space_filling_curve(image, curve):
         n = 3**order
         space_filling_curve = [peano(i, order) for i in range(n * n)]
     elif curve == 'sierpinski':
-        order = np.ceil(log(max(image.shape), 4)).astype(int)
-        n = 4**order
+        order = np.ceil(log(max(image.shape), 2)).astype(int)
+        n = 2**order
         space_filling_curve = [sierpinski(i, order) for i in range(n * n)]
     else:
         raise ValueError('invalid curve type, choose from (hilbert, peano, sierpinski)')

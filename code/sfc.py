@@ -22,41 +22,49 @@ import matplotlib.pyplot as plt
 
 def peano(i, order):
     """
-    Retorna as coordenadas (x, y) do i-ésimo ponto na curva de Peano de ordem order.
+    Return the coordinates (x, y) of i-th point of the Peano curve of given order.
 
-    Parâmetros:
+    References: https://people.csail.mit.edu/jaffer/Geometry/PSFC
+    https://codeforces.com/blog/entry/115590
+
+    Parameters:
     -----------
     i : int
-        O índice do ponto na curva de Peano.
+        The index of the point of Peano curve
     order : int
-        A ordem da curva de Peano.
+        The order of the peano curve.
 
-    Retorna:
+    Returns:
     --------
     (x, y) : tuple of int
-        As coordenadas (x, y) do i-ésimo ponto.
+        The coordinates (x, y) of i-th point.
     """
-    # Converte o número i para a base 3
+
+    # find correct order
+    for n in range(order):
+        if max(i,2) < 3**(2*n):
+            order = n
+            break
+
+
+    # convert the number to base 3
     digits = []
     for _ in range(2 * order):
         digits.append(i % 3)
         i //= 3
     digits.reverse()
-    print(f'digitos = {digits}')
 
-    # Separa os dígitos em duas listas (x e y)
+    # filter the digits into two lists x and y
     a = []
     for _ in range(order):
         a.append([digits[2*_], digits[2*_+1]])
 
-    print(f'matriz = {a}')
-
-    # Aplica as transformações inversas
+    # apply the inverse peano flip transformations
     R1, R2 = 0, 0
     tam = order
     for column in range(0,tam): #lines of a
         for line in range(0,2): #columns of a
-            
+
             #build R1:
             R1 = 0
             for j in range(0,column+1): #R1 column
@@ -74,79 +82,15 @@ def peano(i, order):
                 a[column][line] = 2 - a[column][line]
             if (R2 % 2 == 1) and a[column][line] != 1:
                 a[column][line] = 2 - a[column][line]
-            
+
     x, y = 0, 0
 
     for _ in range(len(a)):
-        x += a[_][0]
-        y += a[_][1]
+        base = (3**(order-_-1))
+        x += base * a[_][0]
+        y += base * a[_][1]
 
     return (x, y)
-
-'''
-def peano(i, order):
-    """
-    Compute the (x, y) coordinates of the i-th point on a Peano curve of a given order.
-
-    Parameters:
-    -----------
-    i : int
-        The index of the point on the Peano curve.
-    order : int
-        The order of the Peano curve. The curve will cover a 3^order x 3^order grid.
-
-    Returns:
-    --------
-    (x, y) : tuple of int
-        The (x, y) coordinates of the i-th point on the Peano curve.
-    """
-
-    points = [
-        (0, 0),
-        (0, 1),
-        (0, 2),
-        (1, 2),
-        (1, 1),
-        (1, 0),
-        (2, 0),
-        (2, 1),
-        (2, 2)
-    ]
-    
-    #tem que testar pra ver se isso ta funcinando certo
-
-    if i > (3**(2*order))-1 : #se o número for maior do que o número de quadrados que existem
-        raise ValueError("Number can't be bigger than the number of divisions")
-
-    index = i % 9  
-    x, y = points[index]
-
-    for j in range(1, order):
-        i = i // 9  
-        shift = 3**j  
-        index = i % 9  
-
-        if index == 0:
-            x, y = y, x
-        elif index == 1:
-            x, y = x, y + shift
-        elif index == 2:
-            x, y = x + shift, y + shift
-        elif index == 3:
-            x, y = x + shift, y - shift
-        elif index == 4:
-            x, y = x + shift, y
-        elif index == 5:
-            x, y = x - shift, y + shift
-        elif index == 6:
-            x, y = x - shift, y - shift
-        elif index == 7:
-            x, y = x - shift, y
-        elif index == 8:
-            x, y = 2 * shift - 1 - y, shift - 1 - x
-
-    return (x, y)
-'''
 
 
 def hilbert(i, order):
@@ -198,7 +142,7 @@ def hilbert(i, order):
     return (x, y)
 
 
-def lesbegue(i, order):
+def lebesgue(i, order):
     """
     Compute the (x, y) coordinates of the i-th point on a Lesbegue curve of a given order.
 
@@ -255,12 +199,12 @@ if __name__ == '__main__':
 
     default = {
         'curve': 'peano',
-        'order': 2,
+        'order': 3,
     }
 
     parser.add_argument('--curve', metavar='curve', type=str,
                         default=default['curve'],
-                        help='type of space filling curve (hilbert, peano, lesbegue)')
+                        help='type of space filling curve (hilbert, peano, lebesgue)')
     parser.add_argument('--order', metavar='order', type=int,
                         default=default['order'],
                         help='order of the space filling curve (1, 2, 3, ...)')
@@ -275,11 +219,11 @@ if __name__ == '__main__':
     elif curve == 'peano':
         n = 3**order
         space_filling_curve = [peano(i, order) for i in range(n * n)]
-    elif curve == 'lesbegue':
+    elif curve == 'lebesgue':
         n = 2**order
-        space_filling_curve = [lesbegue(i, order) for i in range(n * n)]
+        space_filling_curve = [lebesgue(i, order) for i in range(n * n)]
     else:
-        raise ValueError('invalid curve type, choose from (hilbert, peano, lesbegue)')
+        raise ValueError('invalid curve type, choose from (hilbert, peano, lebesgue)')
 
     fig, ax = plt.subplots()
 

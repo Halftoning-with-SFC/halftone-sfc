@@ -22,6 +22,70 @@ import matplotlib.pyplot as plt
 
 def peano(i, order):
     """
+    Retorna as coordenadas (x, y) do i-ésimo ponto na curva de Peano de ordem order.
+
+    Parâmetros:
+    -----------
+    i : int
+        O índice do ponto na curva de Peano.
+    order : int
+        A ordem da curva de Peano.
+
+    Retorna:
+    --------
+    (x, y) : tuple of int
+        As coordenadas (x, y) do i-ésimo ponto.
+    """
+    # Converte o número i para a base 3
+    digits = []
+    for _ in range(2 * order):
+        digits.append(i % 3)
+        i //= 3
+    digits.reverse()
+    print(f'digitos = {digits}')
+
+    # Separa os dígitos em duas listas (x e y)
+    a = []
+    for _ in range(order):
+        a.append([digits[2*_], digits[2*_+1]])
+
+    print(f'matriz = {a}')
+
+    # Aplica as transformações inversas
+    R1, R2 = 0, 0
+    tam = order
+    for column in range(0,tam): #lines of a
+        for line in range(0,2): #columns of a
+            
+            #build R1:
+            R1 = 0
+            for j in range(0,column+1): #R1 column
+                for k in range(0,line): #R1 line
+                    R1 += a[j][k]
+
+            #build R2:
+            R2 = 0
+            for j in range(0,column): #R2 column
+                for k in range(line+1,2): #R2 line
+                    R2 += a[j][k]
+
+            #check for the inverse peanos:
+            if (R1 % 2 == 1) and a[column][line] != 1:
+                a[column][line] = 2 - a[column][line]
+            if (R2 % 2 == 1) and a[column][line] != 1:
+                a[column][line] = 2 - a[column][line]
+            
+    x, y = 0, 0
+
+    for _ in range(len(a)):
+        x += a[_][0]
+        y += a[_][1]
+
+    return (x, y)
+
+'''
+def peano(i, order):
+    """
     Compute the (x, y) coordinates of the i-th point on a Peano curve of a given order.
 
     Parameters:
@@ -82,6 +146,7 @@ def peano(i, order):
             x, y = 2 * shift - 1 - y, shift - 1 - x
 
     return (x, y)
+'''
 
 
 def hilbert(i, order):
@@ -189,8 +254,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     default = {
-        'curve': 'hilbert',
-        'order': 4,
+        'curve': 'peano',
+        'order': 2,
     }
 
     parser.add_argument('--curve', metavar='curve', type=str,
@@ -231,6 +296,6 @@ if __name__ == '__main__':
     ax.set_aspect('equal')
 
     plt.grid(True)
-    plt.title('Space Filling Curves')
+    plt.title(f"Space Filling Curves - {default['curve']} curve - order {default['order']}")
 
     plt.show()

@@ -192,6 +192,11 @@ def lebesgue(i, order):
 
     return (x,y)
 
+def sierpinski():
+    
+    #TODO: Implement Sierpinski curve
+    
+    raise NotImplementedError()
 
 
 if __name__ == '__main__':

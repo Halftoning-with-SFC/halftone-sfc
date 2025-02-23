@@ -72,7 +72,7 @@ def halftoning(image, curve, cluster_size):
     n_clusters = len(space_filling_curve) // cluster_size
     clusters = np.array_split(space_filling_curve, n_clusters)
 
-    intensity_accumulator = 0
+    intensity_accumulator = np.int32(0)
 
     for cluster in clusters:
         for x, y in cluster:

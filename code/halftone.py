@@ -65,7 +65,7 @@ def edge_enhancement(image):
     return image
 
 
-def halftoning(image, curve, cluster_size):
+def halftoning(image, curve, cluster_size, distribution):
     halftone = np.zeros_like(image)
 
     space_filling_curve = generate_space_filling_curve(image, curve)
@@ -75,15 +75,22 @@ def halftoning(image, curve, cluster_size):
     intensity_accumulator = np.int32(0)
 
     for cluster in clusters:
+        sort_cluster = []
         for x, y in cluster:
             intensity_accumulator += image[y, x]
+            sort_cluster.append([image[y, x], x, y])
+        
+        if distribution == 'ordered':
+            sort_cluster.sort(reverse=True)
+
+        blacks = intensity_accumulator//255
+        intensity_accumulator = intensity_accumulator%255
 
         for x, y in cluster:
-            if intensity_accumulator >= 255:
-                halftone[y, x] = 255
-                intensity_accumulator -= 255
-            else:
                 halftone[y, x] = 0
+
+        for i in range(blacks):
+            halftone[sort_cluster[i][2], sort_cluster[i][1]] = 255
 
     return halftone
 
@@ -95,6 +102,7 @@ if __name__ == '__main__':
         'image': 'data/input/araras.png',
         'curve': 'hilbert',
         'cluster_size': 4,
+        'distribution' : 'standart'
     }
 
     parser.add_argument('--image', metavar='image', type=str,
@@ -106,14 +114,18 @@ if __name__ == '__main__':
     parser.add_argument('--cluster_size', metavar='cluster_size', type=int,
                         default=default['cluster_size'],
                         help='size of the cluster for halftoning')
+    parser.add_argument('--distribution', metavar='distribution', type=str,
+                        default=default['distribution'],
+                        help='how blacks are distributed within the cluster ( standart, ordered, random )')
     args = parser.parse_args()
 
     image = cv2.imread(args.image, cv2.IMREAD_GRAYSCALE)
     curve = args.curve
     cluster_size = args.cluster_size
+    distribution = args.distribution
 
     gamma_image = gammma_correction(image)
     edge_image = edge_enhancement(gamma_image)
-    halftone_image = halftoning(edge_image, curve, cluster_size)
+    halftone_image = halftoning(edge_image, curve, cluster_size, distribution)
 
-    cv2.imwrite(f"data/output/{curve}_{cluster_size}_{args.image.split('/')[-1]}", halftone_image)
+    cv2.imwrite(f"data/output/{curve}_{cluster_size}_{distribution}_{args.image.split('/')[-1]}", halftone_image)

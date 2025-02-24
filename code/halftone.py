@@ -25,6 +25,7 @@ import argparse
 import cv2
 import numpy as np
 from sfc import peano, hilbert, sierpinski
+import random
 
 
 def generate_space_filling_curve(image, curve):
@@ -82,6 +83,9 @@ def halftoning(image, curve, cluster_size, distribution):
         
         if distribution == 'ordered':
             sort_cluster.sort(reverse=True)
+        
+        if distribution == 'random':
+            random.shuffle(sort_cluster)
 
         blacks = intensity_accumulator//255
         intensity_accumulator = intensity_accumulator%255

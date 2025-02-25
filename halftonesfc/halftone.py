@@ -2,7 +2,7 @@ import random
 import cv2
 import numpy as np
 
-from halftonesfc.sfc import peano, hilbert, lebesgue
+from .sfc import peano, hilbert, lebesgue
 
 
 def generate_space_filling_curve(image, curve):

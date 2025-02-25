@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="halftonesfc",
-    version="0.1.0",
+    version="0.1.1",
     author="halftonesfc-team",
     author_email="al.pedro.porto@impatech.org.br",
     description="A Python package for Digital Halftoning with Space Filling Curves",

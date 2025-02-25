@@ -30,7 +30,7 @@ import argparse
 import os
 import cv2
 
-from halftonesfc.halftone import edge_enhancement, gammma_correction, halftoning
+from .halftone import edge_enhancement, gammma_correction, halftoning
 
 
 def main():

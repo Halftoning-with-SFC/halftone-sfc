@@ -27,7 +27,6 @@ import numpy as np
 from sfc import peano, hilbert, sierpinski
 import random
 
-
 def generate_space_filling_curve(image, curve):
     log = lambda x, b : np.log(x) / np.log(b)
 
@@ -52,18 +51,24 @@ def generate_space_filling_curve(image, curve):
     return space_filling_curve
 
 
-def gammma_correction(image):
+def gammma_correction(image, gamma):
+    
+    img_normalized = image / 255.0
+    gamma_corrected = np.power(img_normalized, gamma)
+    gamma_corrected = (gamma_corrected * 255).astype(np.uint8)
 
-    #TODO: Implement gamma correction
-
-    return image
+    return gamma_corrected
 
 
-def edge_enhancement(image):
+def edge_enhancement(image, alpha, beta):
+    
+    blurred = cv2.GaussianBlur(image, (0, 0), sigmaX=beta)
+    enhanced = cv2.addWeighted(image, 1 + alpha, blurred, -alpha, 0)
+    enhanced = np.clip(enhanced, 0, 255).astype(np.uint8)
 
-    #TODO: Implement gamma correction
+    #: Implement gamma correction
 
-    return image
+    return enhanced
 
 
 def halftoning(image, curve, cluster_size, distribution):
@@ -127,9 +132,13 @@ if __name__ == '__main__':
     curve = args.curve
     cluster_size = args.cluster_size
     distribution = args.distribution
+    
+    Alpha = 1.0
+    Gamma = 1.0
+    Beta = 1.0
 
-    gamma_image = gammma_correction(image)
-    edge_image = edge_enhancement(gamma_image)
+    gamma_image = gammma_correction(image, Gamma)
+    edge_image = edge_enhancement(gamma_image, Alpha, Beta)
     halftone_image = halftoning(edge_image, curve, cluster_size, distribution)
 
     cv2.imwrite(f"data/output/{curve}_{cluster_size}_{distribution}_{args.image.split('/')[-1]}", halftone_image)

@@ -18,6 +18,7 @@
 
 import argparse
 import matplotlib.pyplot as plt
+import turtle
 
 
 def peano(i, order):
@@ -189,7 +190,67 @@ def lebesgue(i, order):
             y += shift
 
     return (x,y)
+def Sierpinski(iterations, step_size):
+    def generate_l_system(iterations, axiom, rules):
+        current = axiom
+        for _ in range(iterations):
+            next_str = []
+            for char in current:
+                next_str.append(rules.get(char, char))
+            current = ''.join(next_str)
+        return current
 
+    def draw_l_system(t, l_string, angle, step_size):
+        points = [t.position()]  # Store initial position
+        for cmd in l_string:
+            if cmd == 'F':
+                t.forward(step_size)
+                points.append(t.position())
+            elif cmd == '+':
+                t.left(angle)
+            elif cmd == '-':
+                t.right(angle)
+        return points
+
+    def get_curve_coordinates(iterations=4, step_size=3):
+        axiom = "F--XF--F--XF"
+        rules = {'X': 'XF+F+XF--F--XF+F+X'}
+        angle = 45
+
+        l_string = generate_l_system(iterations, axiom, rules)
+
+        pen = turtle.Turtle()
+        pen.speed(0)
+        pen.hideturtle()
+        pen.penup()
+        
+        # Start at center (0,0) for better normalization
+        pen.goto(0, 0)
+        pen.setheading(45)
+        pen.pendown()
+        
+        points = draw_l_system(pen, l_string, angle, step_size)
+        
+        # Normalize coordinates to 1x1 square
+        xs = [p[0] for p in points]
+        ys = [p[1] for p in points]
+        
+        min_x, max_x = min(xs), max(xs)
+        min_y, max_y = min(ys), max(ys)
+        
+        # Calculate scaling factor
+        width = max_x - min_x
+        height = max_y - min_y
+        scale = max(width, height) or 1.0  # Prevent division by zero
+        
+        normalized = [(
+            (x - min_x) / scale,
+            (y - min_y) / scale
+        ) for x, y in points]
+        
+        # Return coordinates rounded to 6 decimal places
+        return [(round(nx, 6), round(ny, 6)) for nx, ny in normalized]
+    return get_curve_coordinates(iterations, step_size)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

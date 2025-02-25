@@ -6,13 +6,13 @@
 #
 # sfc.py --curve peano --order 2
 # sfc.py --curve hilbert --order 3
-# sfc.py --curve sierpinski --order 4
+# sfc.py --curve lebesgue --order 4
 # ------------------------------------------------------------------------------
 # usage: sfc.py [-h] [--curve curve] [--order order]
 #
 # options:
 #   -h, --help     show this help message and exit
-#   --curve curve  type of space filling curve (hilbert, peano, sierpinski)
+#   --curve curve  type of space filling curve (hilbert, peano, lebesgue)
 #   --order order  order of the space filling curve (1, 2, 3, ...)
 # ------------------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ def hilbert(i, order):
         The (x, y) coordinates of the i-th point on the Hilbert curve.
     """
 
-    if i > (2**(2*order))-1 : #se o número for maior do que o número de quadrados que existem
+    if i > (2**(2*order))-1 :
         raise ValueError("Number can't be bigger than the number of divisions")
 
     points = [
@@ -159,7 +159,7 @@ def lebesgue(i, order):
         The (x, y) coordinates of the i-th point on the Lesbegue curve.
     """
 
-    if i >= (4**order): #se o número for maior do que o número de quadrados que existem
+    if i >= (4**order):
         raise ValueError(f"Index i must be less than 4^{order} = {4**order}.")
 
     def binary(num,size):
@@ -176,10 +176,8 @@ def lebesgue(i, order):
     binary_num = binary(i,order*2)
 
     for k in range(order):
-        # Extrai o par de bits atual
         bits = binary_num[2*k : 2*(k+1)]
 
-        # Calcula o deslocamento com base na ordem atual
         shift = 2**(order - k - 1)
 
         if bits == "01":
@@ -191,12 +189,6 @@ def lebesgue(i, order):
             y += shift
 
     return (x,y)
-
-def sierpinski():
-    
-    #TODO: Implement Sierpinski curve
-    
-    raise NotImplementedError()
 
 
 if __name__ == '__main__':

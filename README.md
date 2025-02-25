@@ -37,7 +37,7 @@ To install the application using git, follow these steps:
 ### 🚀 Running the Application
 1. Run it using Python:
     ```bash
-    python main.py
+    python halftonesfc/cli.py --help
     ```
 
 ## 🎉 Making Changes to the Project

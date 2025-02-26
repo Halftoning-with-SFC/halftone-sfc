@@ -298,6 +298,6 @@ if __name__ == '__main__':
     ax.set_aspect('equal')
 
     plt.grid(True)
-    plt.title(f"Space Filling Curves - {default['curve']} curve - order {default['order']}")
+    plt.title(f"Space Filling Curves - {args.curve.capitalize()} Curve of Order {args.order}")
 
     plt.show()

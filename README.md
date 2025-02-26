@@ -1,5 +1,5 @@
 # Digital halftoning with space filling curves
-> Repository for `Digital halftoning with space filling curves` code.
+> `Digital halftoning with space filling curves` implementation.
 
 ![Description of the image](data/output/hilbert_1_araras.png)
 
@@ -16,44 +16,16 @@ In this README, you will find setup instructions to **install and run the applic
 - **Customization**: Users can adjust gamma correction, edge enhancement, cluster size, and distribution method.
 - **Dependencies**: Built with Python, OpenCV, and NumPy.
 
+
 ## ⚙️ Setting Up and Running Digital Halftoning with Space Filling Curves
 ### 📦 Prerequisites
 Before starting, make sure that:
-- You have [git](https://git-scm.com) installed on your machine.
 - You have [Python](https://www.python.org/downloads) installed on your machine.
 
-### 🏗️ Installing the Application
-To install the application using git, follow these steps:
-1. Clone the project to a directory of your choice (HTTPS):
-    ```bash
-    git clone https://github.com/Halftoning-with-SFC/halftone-sfc.git
-    ```
-    or (SSH)
-    ```bash
-    git clone git@github.com:Halftoning-with-SFC/halftone-sfc.git
-    ```
-2. After cloning the project, navigate to it:
-    ```bash
-    cd halftone-sfc
-    ```
-3. Create a virtual environment `.venv` in Python:
-    ```bash
-    python -m venv .venv
-    ```
-4. Activate your virtual environment:
-    ```bash
-    source .venv/bin/activate
-    ```
-5. Then, install the dependencies in your new Python virtual environment:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-### 🚀 Running the Application
-Run it using Python:
-    ```bash
-    python3 -m halftonesfc.cli --help
-    ```
+### 🏗️ Installing (with pip)
+```
+pip install halftonesfc
+```
 
 ### 📋 Parameters
 The application accepts the following arguments:
@@ -90,16 +62,120 @@ The application accepts the following arguments:
   Default: `1.0`  
   Example: `--gamma 0.8`
 
+### 🛠️ CLI Examples
+Here are some examples of how to use the CLI application with different parameters:
+
+1. **Basic Usage**:
+   ```bash
+   halftonesfc --in_image data/input/araras.png --curve hilbert --cluster_size 4
+   ```
+   
+2. **All Parameters**
+   ```bash
+   halftonesfc --in_image data/input/araras.png --curve peano --cluster_size 8 --out_image output/araras_halftoned.png --distribution ordered --strength 1.2 --blur 1.5 --gamma 0.9
+   ```
+### 🛠️ Package Example
+Here is some example of how to use the package with different parameters:
+**Basic Usage**
+```python 
+import cv2
+
+from halftonesfc import halftoning, gammma_correction, edge_enhancement
+
+image = cv2.imread("in_image.png", cv2.IMREAD_GRAYSCALE)
+gamma_image = gammma_correction(image, 1)
+edge_image = edge_enhancement(gamma_image, 1, 1)
+halftone_image = halftoning(edge_image, "hilbert", 4)
+
+cv2.imwrite("out_image.png", halftone_image)
+```
+
+<br/><br/><br/><br/>
+## 👨‍💻 For Developers:
+
+### 📦 Prerequisites
+Before starting, make sure that:
+- You have [git](https://git-scm.com) installed on your machine.
+- You have [Python](https://www.python.org/downloads) installed on your machine.
+
+### 🏗️ Installing the Application from GitHub
+To install the application using git, follow these steps:
+1. Clone the project to a directory of your choice (HTTPS):
+    ```bash
+    git clone https://github.com/Halftoning-with-SFC/halftone-sfc.git
+    ```
+    or (SSH)
+    ```bash
+    git clone git@github.com:Halftoning-with-SFC/halftone-sfc.git
+    ```
+2. After cloning the project, navigate to it:
+    ```bash
+    cd halftone-sfc
+    ```
+3. Create a virtual environment `.venv` in Python:
+    ```bash
+    python -m venv .venv
+    ```
+4. Activate your virtual environment:
+    ```bash
+    source .venv/bin/activate
+    ```
+5. Then, install the dependencies in your new Python virtual environment:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### 🚀 Running the Application
+Run it using Python.
+Example:
+    ```bash
+    python3 -m halftonesfc.cli --help
+    ```
+
+
+### or Installing the Application (from GitHub)
+To install the application using git, follow these steps:
+1. Clone the project to a directory of your choice (HTTPS):
+    ```bash
+    git clone https://github.com/Halftoning-with-SFC/halftone-sfc.git
+    ```
+    or (SSH)
+    ```bash
+    git clone git@github.com:Halftoning-with-SFC/halftone-sfc.git
+    ```
+2. After cloning the project, navigate to it:
+    ```bash
+    cd halftone-sfc
+    ```
+3. Create a virtual environment `.venv` in Python:
+    ```bash
+    python -m venv .venv
+    ```
+4. Activate your virtual environment:
+    ```bash
+    source .venv/bin/activate
+    ```
+5. Then, install the dependencies in your new Python virtual environment:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### 🚀 Running the Application
+Run it using Python.
+Example:
+    ```bash
+    python3 -m halftonesfc.cli --help
+    ```
+
 ### 🛠️ Examples
-Here are some examples of how to use the application with different parameters:
+Here are some examples of how to use the CLI application:
 
 1. **Basic Usage**:
    ```bash
    python3 -m halftonesfc.cli --in_image data/input/araras.png --curve hilbert --cluster_size 4
-   
-2. **All Parameters**
-   ```bash
-   python3 -m halftonesfc.cli --in_image data/input/araras.png --curve peano --cluster_size 8 --out_image output/araras_halftoned.png --distribution ordered --strength 1.2 --blur 1.5 --gamma 0.9
+   ```
+
+
 
 ## 🎉 Making Changes to the Project
 After installing the application on your machine, make sure you are in the project directory ("halftone-sfc").

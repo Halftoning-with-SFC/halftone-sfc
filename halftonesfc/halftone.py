@@ -40,10 +40,10 @@ def gammma_correction(image, gamma=1):
     return image
 
 
-def edge_enhancement(image, alpha=1, beta=1):
+def edge_enhancement(image, strength=1, blur=1):
 
-    blurred = cv2.GaussianBlur(image, (0, 0), sigmaX=beta)
-    enhanced = cv2.addWeighted(image, 1 + alpha, blurred, -alpha, 0)
+    blurred = cv2.GaussianBlur(image, (0, 0), sigmaX=blur)
+    enhanced = cv2.addWeighted(image, 1 + strength, blurred, -strength, 0)
     enhanced = np.clip(enhanced, 0, 255).astype(np.uint8)
 
     return enhanced

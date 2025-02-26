@@ -21,8 +21,8 @@
 #   --cluster_size cluster_size  size of the cluster for halftoning
 #   --out_image out_image        path to the output image
 #   --distribution distribution  how blacks are distributed within the cluster (standard, ordered, random)
-#   --alpha alpha  Alpha value for edge enhancement (default: 1.0)
-#   --beta beta  Beta value for edge enhancement (default: 1.0)
+#   --strength strength  strength value for edge enhancement (default: 1.0)
+#   --blur blur  blur value for edge enhancement (default: 1.0)
 #   --gamma gamma  Gamma value for gamma correction (default: 1.0)
 # --------------------------------------------------------------------------------------------------
 
@@ -40,8 +40,8 @@ def main():
         'curve': 'hilbert',
         'cluster_size': 4,
         'distribution' : 'standard',
-        'alpha': 1.0,
-        'beta': 1.0,
+        'strength': 1.0,
+        'blur': 1.0,
         'gamma': 1.0
     }
 
@@ -61,10 +61,10 @@ def main():
     parser.add_argument('--distribution', metavar='distribution', type=str,
                         default=default['distribution'],
                         help='how blacks are distributed within the cluster (standard, ordered, random)')
-    parser.add_argument('--alpha', type=float, default=default['alpha'],
-                        help='Alpha value for edge enhancement (default: 1.0)')
-    parser.add_argument('--beta', type=float, default=default['beta'],
-                        help='Beta value for edge enhancement (default: 1.0)')
+    parser.add_argument('--strength', type=float, default=default['strength'],
+                        help='strength value for edge enhancement (default: 1.0)')
+    parser.add_argument('--blur', type=float, default=default['blur'],
+                        help='blur value for edge enhancement (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=default['gamma'],
                         help='Gamma value for gamma correction (default: 1.0)')
     
@@ -86,7 +86,7 @@ def main():
         
     if args.out_image is None:
         filename = os.path.basename(args.in_image)
-        args.out_image = os.path.join(os.getcwd(), f"{args.curve}_{args.cluster_size}_{args.distribution}_{args.alpha}_{args.beta}_{args.gamma}_{filename}")
+        args.out_image = os.path.join(os.getcwd(), f"{args.curve}_{args.cluster_size}_{args.distribution}_{args.strength}_{args.blur}_{args.gamma}_{filename}")
 
     output_dir = os.path.dirname(args.out_image)
     if output_dir:
@@ -102,7 +102,7 @@ def main():
     distribution = args.distribution
 
     gamma_image = gammma_correction(image, args.gamma)
-    edge_image = edge_enhancement(gamma_image, args.alpha, args.beta)
+    edge_image = edge_enhancement(gamma_image, args.strength, args.blur)
 
     halftone_image = halftoning(edge_image, curve, cluster_size, distribution)
 

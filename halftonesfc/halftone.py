@@ -50,7 +50,6 @@ def edge_enhancement(image, strength=1, blur=1):
 
 def halftoning(image, curve, cluster_size, separate = False, monocrome=False, distribution="standard"):
     """
-    Arrumar essa porra
 
     Parameters:
     -----------
